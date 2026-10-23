@@ -100,6 +100,8 @@
 .decision-shortcut:hover,.decision-shortcut:focus-visible{border-color:var(--primary);outline:2px solid var(--primary);outline-offset:1px}
 @media(max-width:1100px) and (min-width:769px){.head .ui-zoom-controls{margin-right:auto}.head .area-tabs{flex:1 1 100%;max-width:100%}}
 @media(max-width:768px){.app>.head .ui-zoom-controls{justify-self:start;grid-row:2}.app>.head .area-tabs{grid-row:3}}
+#theme{min-width:104px;white-space:nowrap;font-weight:700}
+.main>section,.main>.area-section>section{content-visibility:auto;contain-intrinsic-size:auto 720px}
 @media(max-width:600px){.decision-shortcuts{grid-template-columns:1fr}}
 </style>
 
@@ -479,10 +481,10 @@ code{overflow-wrap:anywhere;word-break:break-word}
 <a class="skip-link" href="#visao">Pular para o conteúdo</a>
 <div class="app">
 <div class="side-backdrop" onclick="closeMobileSidebar()" aria-hidden="true"></div>
-<button class="mobile-fab" type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menu de navegação">☰ Menu</button>
+<button class="mobile-fab" type="button" onclick="toggleMobileSidebar()" aria-label="Abrir menu de navegação" aria-controls="sidebar" aria-expanded="false">☰ Menu</button>
 
 <!-- SIDEBAR NAVIGATION GROUPED INTO 4 MAIN AREAS -->
-<aside class="side" id="sidebar">
+<aside class="side" id="sidebar" aria-label="Menu lateral do Radar">
   <button class="sidebar-collapse-toggle" id="sidebarCollapseToggle" type="button" onclick="toggleSidebarCollapse()" aria-label="Ocultar menu de funções" aria-controls="sidebar" aria-expanded="true" title="Ocultar menu de funções">‹</button>
   <div class="brand">
     <svg viewBox="0 0 40 40" fill="none"><path d="M20 3 35 12v16L20 37 5 28V12L20 3Z" stroke="currentColor" stroke-width="2.4"/><path d="M12 25c4-9 12-9 16 0M15 18h10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
@@ -492,7 +494,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <!-- AREA 1: ANALISAR -->
   <div class="nav-group" data-area="analisar">
     <div class="nav-group-title">📊 1. Analisar</div>
-    <nav>
+    <nav aria-label="Navegação: Analisar">
       <a href="#guia-analise" onclick="setActiveArea('analisar')">🧭 Comece por aqui</a>
       <a class="active" href="#visao" onclick="setActiveArea('analisar')">📊 Visão Geral & Métricas</a>
       <a href="#biblioteca" onclick="setActiveArea('analisar');setLibraryView('all')">📚 Biblioteca & Rankings</a>
@@ -522,7 +524,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <!-- AREA 2: PLANEJAR -->
   <div class="nav-group" data-area="planejar">
     <div class="nav-group-title">💡 2. Planejar</div>
-    <nav>
+    <nav aria-label="Navegação: Planejar">
       <a href="#conversao" onclick="setActiveArea('planejar')">🎯 Ganchos & SEO</a>
       <a href="#roteiro-por-objetivo" onclick="setActiveArea('planejar')">🎬 Roteiro por Objetivo</a>
       <a href="#estrategista-criar" onclick="setActiveArea('planejar')">👜 Criar vídeos para um produto</a>
@@ -539,7 +541,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <!-- AREA 3: TESTAR -->
   <div class="nav-group" data-area="testar">
     <div class="nav-group-title">🧪 3. Testar</div>
-    <nav>
+    <nav aria-label="Navegação: Testar">
       <a href="#ciclo-testes-ab" onclick="setActiveArea('testar')">🧪 Ciclo de Testes A/B</a>
       <a href="#protocolo-decisao" onclick="setActiveArea('testar')">🧭 Protocolo de Decisão & Aprendizado</a>
       <a href="#estrategista-testar" onclick="setActiveArea('testar')">🧪 Comparar testes do criativo</a>
@@ -555,7 +557,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <!-- AREA 4: VENDER COM EFICIÊNCIA -->
   <div class="nav-group" data-area="vender">
     <div class="nav-group-title">💰 4. Vender com Eficiência</div>
-    <nav>
+    <nav aria-label="Navegação: Vender">
       <a href="#ponte-comercial" onclick="setActiveArea('vender')">🌉 Ponte Criativo ➔ Vendas (só vídeos próprios)</a>
       <a href="#centro-inteligencia-v4" onclick="setActiveArea('vender')">🧠 Centro de Inteligência V4</a>
       <a href="#estrategista-resultados" onclick="setActiveArea('vender')">📊 Painel de resultados reais</a>
@@ -589,17 +591,17 @@ code{overflow-wrap:anywhere;word-break:break-word}
     <button type="button" id="interfaceZoomOut" aria-label="Diminuir zoom" title="Diminuir zoom">−</button>
     <button type="button" id="interfaceZoomValue" class="ui-zoom-value" aria-label="Restaurar zoom para 100%" title="Clique para restaurar 100%">100%</button>
     <button type="button" id="interfaceZoomIn" aria-label="Aumentar zoom" title="Aumentar zoom">+</button>
-    <button class="btn" id="theme" type="button" title="Alternar tema claro ou escuro" aria-label="Alternar tema claro ou escuro">◐ Tema</button>
+    <button class="btn" id="theme" type="button" aria-pressed="false" aria-label="Alternar para o tema escuro" title="Tema atual: claro. Clique para alternar">🌙 Escuro</button>
   </div>
 
   <!-- Area Selection Tabs on Top Header -->
-  <div class="area-tabs" id="areaTabs">
-    <button class="area-tab active" data-area="todas" onclick="filterByArea('todas')">🌐 Todas as Áreas</button>
-    <button class="area-tab" data-area="analisar" onclick="filterByArea('analisar')">📊 1. Analisar</button>
-    <button class="area-tab" data-area="planejar" onclick="filterByArea('planejar')">💡 2. Planejar</button>
-    <button class="area-tab" data-area="testar" onclick="filterByArea('testar')">🧪 3. Testar</button>
-    <button class="area-tab" data-area="vender" onclick="filterByArea('vender')">💰 4. Vender</button>
-  </div>
+  <nav class="area-tabs" id="areaTabs" aria-label="Filtrar áreas do Radar">
+    <button class="area-tab active" type="button" aria-pressed="true" data-area="todas" onclick="filterByArea('todas')">🌐 Todas as Áreas</button>
+    <button class="area-tab" type="button" aria-pressed="false" data-area="analisar" onclick="filterByArea('analisar')">📊 1. Analisar</button>
+    <button class="area-tab" type="button" aria-pressed="false" data-area="planejar" onclick="filterByArea('planejar')">💡 2. Planejar</button>
+    <button class="area-tab" type="button" aria-pressed="false" data-area="testar" onclick="filterByArea('testar')">🧪 3. Testar</button>
+    <button class="area-tab" type="button" aria-pressed="false" data-area="vender" onclick="filterByArea('vender')">💰 4. Vender</button>
+  </nav>
 
 </header>
 
@@ -2040,7 +2042,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
 </div>
 
 <!-- MODALS -->
-<dialog id="modal">
+<dialog id="modal" aria-labelledby="mtitle">
   <div class="modalhead">
     <b id="mtitle">Detalhes do Vídeo</b>
     <button class="close" id="close" aria-label="Fechar">×</button>
@@ -2048,7 +2050,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <div class="modalbody" id="mbody"></div>
 </dialog>
 
-<dialog id="multiModal">
+<dialog id="multiModal" aria-labelledby="multiTitle">
   <div class="modalhead">
     <b id="multiTitle">Análise Comparativa & Roteiro Combinado</b>
     <button class="close" id="multiClose" aria-label="Fechar">×</button>
@@ -2056,10 +2058,10 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <div class="modalbody" id="multiBody"></div>
 </dialog>
 
-<dialog id="newVideoModal">
+<dialog id="newVideoModal" aria-labelledby="newVideoModalTitle">
   <div class="modalhead">
-    <b>➕ Adicionar Novo Vídeo ao Radar</b>
-    <button class="close" onclick="document.getElementById('newVideoModal').close()">×</button>
+    <b id="newVideoModalTitle">➕ Adicionar Novo Vídeo ao Radar</b>
+    <button class="close" type="button" aria-label="Fechar janela de novo vídeo" onclick="document.getElementById('newVideoModal').close()">×</button>
   </div>
   <div class="modalbody">
     <form id="newVideoForm" onsubmit="handleNewVideoSubmit(event)" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -2104,7 +2106,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
 
 
 <div id="uiToasts" aria-live="polite"></div>
-<dialog id="uiDialog">
+<dialog id="uiDialog" aria-labelledby="uiDialogTitle" aria-describedby="uiDialogMsg">
   <div class="modalhead"><b id="uiDialogTitle">Confirmar</b><button class="close" type="button" id="uiDialogX" aria-label="Fechar">×</button></div>
   <div class="modalbody">
     <p id="uiDialogMsg" style="white-space:pre-wrap;margin:0 0 12px;line-height:1.5"></p>
@@ -2553,7 +2555,9 @@ function renderChartFallback(canvas, type, labels, data, colors) {
 // --- AREA NAVIGATION & MOBILE RESPONSIVENESS ---
 function filterByArea(areaKey) {
   document.querySelectorAll('.area-tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.area === areaKey);
+    const active=tab.dataset.area===areaKey;
+    tab.classList.toggle('active',active);
+    tab.setAttribute('aria-pressed',String(active));
   });
 
   const sections = document.querySelectorAll('.area-section');
@@ -2582,17 +2586,15 @@ function setActiveArea(areaKey) {
 
 function toggleMobileSidebar() {
   const sidebar = document.getElementById('sidebar');
-  const button = document.querySelector('.mobile-nav-toggle');
   const isOpen = sidebar.classList.toggle('open');
   document.body.classList.toggle('nav-open', isOpen);
-  if (button) button.setAttribute('aria-expanded', String(isOpen));
+  document.querySelectorAll('.mobile-nav-toggle,.mobile-fab').forEach(button=>{button.setAttribute('aria-expanded',String(isOpen));button.setAttribute('aria-label',isOpen?'Fechar menu de navegação':'Abrir menu de navegação');});
 }
 function closeMobileSidebar() {
   const sidebar = document.getElementById('sidebar');
-  const button = document.querySelector('.mobile-nav-toggle');
   if (sidebar) sidebar.classList.remove('open');
   document.body.classList.remove('nav-open');
-  if (button) button.setAttribute('aria-expanded', 'false');
+  document.querySelectorAll('.mobile-nav-toggle,.mobile-fab').forEach(button=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Abrir menu de navegação');});
 }
 
 // Recolhimento da navegação lateral em desktop; preferência guardada neste navegador.
@@ -4721,10 +4723,17 @@ window.__metricsResetBound = true;
 
 $('#close').onclick = () => $('#modal').close();
 $('#multiClose').onclick = () => $('#multiModal').close();
+function syncThemeControl(){
+  const button=$('#theme');if(!button)return;
+  const dark=isDarkTheme();
+  button.textContent=dark?'☀️ Claro':'🌙 Escuro';
+  button.setAttribute('aria-pressed',String(dark));
+  button.setAttribute('aria-label',`Tema ${dark?'escuro':'claro'} ativo. Clique para alternar para o tema ${dark?'claro':'escuro'}.`);
+  button.title=`Tema atual: ${dark?'escuro':'claro'}. Clique para alternar.`;
+}
 $('#theme').onclick = () => {
   document.documentElement.dataset.theme = isDarkTheme() ? 'light' : 'dark';
-  $('#theme').setAttribute('aria-label', `Alternar para tema ${isDarkTheme() ? 'claro' : 'escuro'}`);
-  $('#theme').title = `Tema atual: ${isDarkTheme() ? 'escuro' : 'claro'}. Clique para alternar.`;
+  syncThemeControl();
   const settings = readStoredJson(SETTINGS_STORAGE_KEY, {});
   settings.theme = document.documentElement.dataset.theme;
   settings.engagementMode = $('#engagementMode')?.value || 'social';
@@ -4732,6 +4741,7 @@ $('#theme').onclick = () => {
   catch(e) { setOperationStatus('error','Não foi possível salvar as preferências: ' + e.message); }
   render();
 };
+syncThemeControl();
 
 loadModelEcon();
 runROAS();
@@ -6004,6 +6014,10 @@ function runObjectiveRegressionTests(){
 }
 function runQA(){const tests=[];function check(name,ok,details=''){tests.push({name,ok:!!ok,details})}
  check('Metas e resumo executivo disponíveis',!!$('v4TargetMetric')&&!!$('v4TargetValue')&&!!$('v4SaveTarget')&&!!$('v4TargetSummary')&&!!$('v4ExportExecutive')&&typeof exportExecutiveSummary==='function','Campos e ação de exportação presentes no Centro de Inteligência.');
+ const themeButton=$('theme'),zoomGroup=themeButton?.closest('.ui-zoom-controls');check('Tema claro/escuro fixo e acessível ao lado do zoom',!!themeButton&&!!zoomGroup&&themeButton.getAttribute('aria-pressed')!==null&&!!themeButton.getAttribute('aria-label'),'Controle de tema fica no mesmo grupo visual do zoom e informa o estado a tecnologias assistivas.');
+ const areaNav=$('areaTabs'),sideNavs=[...document.querySelectorAll('#sidebar nav')];check('Navegação principal nomeada e estados anunciados',areaNav?.tagName==='NAV'&&!!areaNav.getAttribute('aria-label')&&sideNavs.length===4&&sideNavs.every(n=>!!n.getAttribute('aria-label'))&&[...areaNav.querySelectorAll('button')].every(b=>b.getAttribute('aria-pressed')!==null),'Landmarks de navegação têm rótulos; os filtros anunciam a área ativa.');
+ const dialogs=['modal','multiModal','newVideoModal','uiDialog'];check('Diálogos relacionados a título e descrição',dialogs.every(id=>{const d=$(id);return !!d?.getAttribute('aria-labelledby')&&!!$(d.getAttribute('aria-labelledby'))})&&!!$('uiDialog')?.getAttribute('aria-describedby'),'Cada diálogo aponta para um título acessível; o diálogo de confirmação também aponta para sua descrição.');
+ check('Renderização adiada das seções fora da tela',document.getElementById('radar-interface-zoom-style')?.textContent.includes('content-visibility:auto'),'Seções longas podem adiar layout e pintura até se aproximarem da área visível.');
  check('Metas calculam taxas com denominadores válidos',getMetricForRecord({views:200,saves:10,shares:4,clicks:8,orders:2,duration:20,avgWatch:10,revenue:50,adCost:10},'saveRate')===5&&getMetricForRecord({views:0,saves:10},'saveRate')===null&&getMetricForRecord({clicks:0,orders:2},'orderClick')===null&&getMetricForRecord({revenue:50,adCost:10},'roas')===5,'Salvamentos/views = 5%; taxas sem denominador retornam sem dados; ROAS = 5x.');
  check('Metas exibem retorno de salvamento no próprio módulo',!!$('v4TargetStatus'),'Feedback de validação e gravação visível ao lado dos controles de metas.');
  check('Alerta de dados antigos não reclassifica referências',Array.isArray(window.__MAFE_STALE_OWN_IDS)&&(window.__MAFE_STALE_OWN_IDS||[]).every(id=>!isProtectedReference(id)),'Somente vídeos classificados como próprios podem aparecer no alerta de atualização após 30 dias.');
