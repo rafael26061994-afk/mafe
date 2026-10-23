@@ -1,0 +1,26 @@
+# Backups exportados pelo painel (podem conter vendas/conversão)
+backup*.json
+radar-backup*
+*_backup_*.json
+exportacao*/
+exports/
+
+# Dados sensíveis: vendas, pedidos, faturamento
+dados/privado/
+dados/vendas*.json
+dados/conversao*.json
+*.csv
+*.xlsx
+
+# Segredos
+.env
+.env.*
+*.key
+*.pem
+tokens.txt
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
