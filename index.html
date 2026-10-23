@@ -4776,6 +4776,7 @@ const M=v=>meta[v.ID]||(meta[v.ID]={origem:'desconhecido',coleta:USER_REPORTED_C
 const num=validNumberOrNull, nf=(x,d=1)=>x===null||x===undefined||!Number.isFinite(x)?'—':x.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
 const med=a=>{a=a.slice().sort((x,y)=>x-y);return a.length?(a.length%2?a[(a.length-1)/2]:(a[a.length/2-1]+a[a.length/2])/2):null};
 function rel(v){const m=M(v),k=METRIC_FIELDS.filter(f=>num(v[f])!==null).length/METRIC_FIELDS.length;return Math.round(ORI[m.origem][1]*(m.confirmado?1:.7)*(m.coleta?1:.85)*(.5+.5*k)*100)/100}
+window.__videoReliability=rel;
 const tier=r=>r>=.7?['Alta','yes']:r>=.4?['Média','partial']:['Baixa','bad-pill'];
 const wavg=(l,fn)=>{let s=0,w=0;l.forEach(v=>{const x=num(fn(v));if(x!==null){const r=rel(v);s+=r*x;w+=r}});return w?s/w:null};
 function evid(v){
@@ -5309,7 +5310,7 @@ function renderSeo(){
 document.getElementById('seoRows').addEventListener('change',()=>recalcRanking());
 window.renderNext=function(){
   const P=window.__PATS||[],mean=l=>l.reduce((s,v)=>s+Number(v.Nota),0)/l.length;
-  const decisionReady=v=>v.Exemplo!==true&&rel(v)>=.4;
+  const decisionReady=v=>v.Exemplo!==true&&typeof window.__videoReliability==="function"&&window.__videoReliability(v)>=.4;
   const referenceSet=videos.filter(v=>isProtectedReference(v.ID));
   const R=P.map(p=>{const rawA=referenceSet.filter(p.f),rawB=referenceSet.filter(v=>!p.f(v)),A=rawA.filter(decisionReady),B=rawB.filter(decisionReady);return A.length>=3&&B.length>=3?{p,nA:A.length,nB:B.length,rawA:rawA.length,rawB:rawB.length,d:mean(A)-mean(B)}:null}).filter(r=>r&&r.d>0).sort((a,b)=>b.d-a.d).slice(0,3);
   const summary=$('#decisionSummary');
@@ -6013,7 +6014,7 @@ function runObjectiveRegressionTests(){
   return {ok:productOk&&scriptOk,details:details.join(' · ')};
 }
 function runQA(){const tests=[];function check(name,ok,details=''){tests.push({name,ok:!!ok,details})}
- check('Metas e resumo executivo disponíveis',!!$('v4TargetMetric')&&!!$('v4TargetValue')&&!!$('v4SaveTarget')&&!!$('v4TargetSummary')&&!!$('v4ExportExecutive')&&typeof exportExecutiveSummary==='function','Campos e ação de exportação presentes no Centro de Inteligência.');
+ const nextActionOk=(()=>{try{window.renderNext?.();return !!$('decisionSummary')&&!!$('nextSteps')}catch(e){return false}})();check('Recomendação da próxima ação sem erro de confiabilidade',typeof window.__videoReliability==='function'&&nextActionOk,'A métrica de confiabilidade é compartilhada explicitamente e a recomendação é renderizada sem ReferenceError.');const newVideoForm=$('newVideoForm');check('Cadastro de vídeo não depende de upload',!!newVideoForm&&!newVideoForm.querySelector('input[type=file]')&&!!$('nvID')&&!!$('nvNome'),'Novo Vídeo registra metadados manualmente; o arquivo é opcional em ferramentas separadas de pré-visualização/análise.'); check('Metas e resumo executivo disponíveis',!!$('v4TargetMetric')&&!!$('v4TargetValue')&&!!$('v4SaveTarget')&&!!$('v4TargetSummary')&&!!$('v4ExportExecutive')&&typeof exportExecutiveSummary==='function','Campos e ação de exportação presentes no Centro de Inteligência.');
  const themeButton=$('theme'),zoomGroup=themeButton?.closest('.ui-zoom-controls');check('Tema claro/escuro fixo e acessível ao lado do zoom',!!themeButton&&!!zoomGroup&&themeButton.getAttribute('aria-pressed')!==null&&!!themeButton.getAttribute('aria-label'),'Controle de tema fica no mesmo grupo visual do zoom e informa o estado a tecnologias assistivas.');
  const areaNav=$('areaTabs'),sideNavs=[...document.querySelectorAll('#sidebar nav')];check('Navegação principal nomeada e estados anunciados',areaNav?.tagName==='NAV'&&!!areaNav.getAttribute('aria-label')&&sideNavs.length===4&&sideNavs.every(n=>!!n.getAttribute('aria-label'))&&[...areaNav.querySelectorAll('button')].every(b=>b.getAttribute('aria-pressed')!==null),'Landmarks de navegação têm rótulos; os filtros anunciam a área ativa.');
  const dialogs=['modal','multiModal','newVideoModal','uiDialog'];check('Diálogos relacionados a título e descrição',dialogs.every(id=>{const d=$(id);return !!d?.getAttribute('aria-labelledby')&&!!$(d.getAttribute('aria-labelledby'))})&&!!$('uiDialog')?.getAttribute('aria-describedby'),'Cada diálogo aponta para um título acessível; o diálogo de confirmação também aponta para sua descrição.');
