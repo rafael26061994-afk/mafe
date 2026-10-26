@@ -968,10 +968,10 @@ code{overflow-wrap:anywhere;word-break:break-word}
     <div class="tablewrap" style="margin-top:10px"><table class="script-table" style="min-width:620px"><tbody id="cmpRows"></tbody></table></div></article>
 </section>
 <section id="seo-legenda">
-  <div class="section-head"><div><h2>🗣️ SEO Falado, Legenda & CTA (pilares 3 e 4)</h2><p>Cole a fala do vídeo (o que é dito no áudio), a legenda e as hashtags, ou use as sugestões da fonte original (legenda e hashtags), sempre com revisão humana. O texto na tela nunca é tratado como fala. O painel pontua: palavra-chave repetida 2–3 vezes, interação no fim, CTA única, 1ª linha da legenda até 150 caracteres, legenda que complementa a fala e 3–5 hashtags sem #fyp/#parati. Quando todos os 26 vídeos estiverem preenchidos, esses pilares entram na nota criativa.</p></div></div>
+  <div class="section-head"><div><h2>🗣️ SEO Falado, Legenda & CTA (pilares 3 e 4)</h2><p>Cole a fala do vídeo (o que é dito no áudio), a legenda e as hashtags, ou use as sugestões da fonte original quando existirem, sempre com revisão humana. O texto na tela nunca é tratado como fala. O painel pontua: palavra-chave repetida 2–3 vezes, interação no fim, CTA única, 1ª linha da legenda até 150 caracteres, legenda que complementa a fala e 3–5 hashtags sem #fyp/#parati. Nos vídeos sem legenda publicada, o status conhecido completa o cadastro, mas não gera pontos de SEO de legenda.</p></div></div>
   <article class="card" style="margin-bottom:12px">
     <h3 style="margin:0 0 6px">📥 Textos e legendas originais recebidos</h3>
-    <p class="context" style="margin:0 0 10px">Transcrições, legendas e hashtags associadas aos IDs V01–V26. As falas de V01, V09, V12 e V25 foram fornecidas pela usuária; V02–V08, V10–V11, V13–V24 e V26 foram informados como vídeos com música e sem fala. As legendas e hashtags já incluídas na fonte são pré-carregadas no painel; quando a legenda não traz hashtag, usam-se as hashtags sugeridas já registradas na ficha do vídeo. Confira o áudio, a legenda e as hashtags antes de marcar “Conferi”. Essas anotações complementam a análise; não alteram os arquivos de vídeo, métricas ou registros canônicos de referência. O campo “Texto/mensagem” continua separado da fala e da legenda publicada.</p>
+    <p class="context" style="margin:0 0 10px">As falas de V01, V09, V12 e V25 foram fornecidas pela usuária; os outros 22 vídeos foram informados como música sem fala. Nos vídeos V19, V08, V05, V17, V02, V21, V09, V20 e V13, a usuária confirmou que há somente hashtags, sem legenda publicada. O sistema registra essa ausência sem criar texto fictício; esses vídeos não recebem pontos por critérios de legenda. Nas demais fichas, legendas e hashtags existentes na fonte podem ser pré-carregadas. Confira os dados disponíveis antes de marcar “Conferi”. Essas anotações complementam a análise; não alteram os arquivos de vídeo, métricas ou registros canônicos de referência. O campo “Texto/mensagem” continua separado da fala e da legenda publicada.</p>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
       <label for="sourceCaptionSearch"><b>Buscar texto/legenda:</b></label>
       <input id="sourceCaptionSearch" type="search" placeholder="Ex.: V03, mochila, notebook..." style="min-width:220px;max-width:100%;padding:8px;border:1px solid var(--line);border-radius:7px" oninput="renderSourceCaptions()">
@@ -4758,6 +4758,29 @@ showMetricsHistory();
 refreshUndoImportButton();
 </script>
 
+<script type="application/json" id="mafeReferenceTrustData">
+{"collectionDate":"2026-10-21","references":{"V01":"2026-07-03","V02":"2026-05-12","V03":"2026-08-14","V04":"2026-09-06","V05":"2026-04-12","V06":"2026-04-18","V07":"2026-03-24","V08":"2026-07-16","V09":"2026-07-08","V10":"2025-05-05","V11":"2026-03-02","V12":"2026-01-10","V13":"2026-07-02","V14":"2026-06-20","V15":"2025-04-03","V16":"2026-01-26","V17":"2026-04-12","V18":"2025-08-13","V19":"2026-07-11","V20":"2026-07-20","V21":"2026-05-30","V22":"2026-09-01","V23":"2025-04-07","V24":"2025-07-19","V25":"2024-11-11","V26":"2026-04-03"}}
+</script>
+<script>
+// Aplica os metadados fornecidos pela usuária uma única vez, sem alterar funções ou o catálogo canônico.
+(function(){
+  const marker='radarMafe_reference_metadata_user_v5';
+  try {
+    if(localStorage.getItem(marker)==='1') return;
+    const data=JSON.parse(document.getElementById('mafeReferenceTrustData').textContent);
+    const key='mafe_radar_confiab_v1';
+    const meta=JSON.parse(localStorage.getItem(key)||'{}')||{};
+    const collected=Date.parse(data.collectionDate+'T00:00:00Z');
+    Object.entries(data.references).forEach(([id,published])=>{
+      const previous=meta[id]&&typeof meta[id]==='object'?meta[id]:{};
+      const age=Math.round((collected-Date.parse(published+'T00:00:00Z'))/86400000);
+      meta[id]=Object.assign({},previous,{origem:'manual',confirmado:true,trafego:'nao_informado',publicado:published,periodo:String(age),coleta:data.collectionDate,origemFonte:'informada_pela_usuaria',confirmadoFonte:'confirmado_pela_usuaria',publicadoFonte:'informada_pela_usuaria',periodoFonte:'calculado_coleta_menos_publicacao',coletaFonte:'informada_pela_usuaria'});
+    });
+    localStorage.setItem(key,JSON.stringify(meta));
+    localStorage.setItem(marker,'1');
+  } catch(e) { /* se o armazenamento estiver indisponível, o restante do sistema continua intacto */ }
+})();
+</script>
 <script>
 // --- MELHORIAS: confiabilidade, evidência, comparação, planos, A/B e financeiro ---
 (function(){
@@ -5166,7 +5189,7 @@ recalcRanking();
 (function(){
 const SK='mafe_radar_seo_v1';let st={};try{st=JSON.parse(localStorage.getItem(SK)||'{}')||{}}catch(e){}
 // Complemento de áudio informado pela usuária. Salvo uma única vez e fora do catálogo canônico V01–V26.
-if(!st._audioFactsUserV1){
+if(!st._audioFactsUserV4){
   const suppliedSpeech={
     V01:"...precisar mandar uma mensagem pra loja, porque antes de comprar essa bolsa aqui, eu ainda entrei lá na loja, entrei nas avaliações, entrei nos comentários, e simplesmente eles vão precisar melhorar a propaganda, porque ela é muito mais perfeita do que a propaganda que eles estavam fazendo dela. Vocês acreditam que eu paguei menos de 100 reais nessa bolsa aqui? E ela é uma bolsa extremamente espaçosa, principalmente pra gente que vai trabalhar ou então que vai pra faculdade. Ela cabe até o meu MacBook, que tem 13 polegadas, eu vou mostrar pra vocês. Olha isso aqui! E no interior dela, ela tem mais de 5 compartimentos ainda.",
     V09:"A minha bolsa preferida para vocês, meninas! Eu vou mostrar com muitos detalhes a minha bolsa que, gente, eu sou apaixonada! Não é brincadeira, tá? Olha, eu só saio com essa bolsa para tudo quanto é lado que eu vou. Ela é ideal principalmente para quem vai passar o dia fora de casa, porque é muito espaçosa. Ela tem esse bolso aqui na lateral, tá? Tem esse aqui também — dois bolsos na lateral. Ela tem mais um bolso aqui atrás, onde eu costumo colocar minhas chaves, que são a chave de casa e a chave do carro (que ficam juntas, é fácil de pegar). Ele é bem grandinho também, ele é bem grandinho!",
@@ -5175,12 +5198,26 @@ if(!st._audioFactsUserV1){
   };
   const musicOnly=['V02','V03','V04','V05','V06','V07','V08','V10','V11','V13','V14','V15','V16','V17','V18','V19','V20','V21','V22','V23','V24','V26'];
   Object.entries(suppliedSpeech).forEach(([id,text])=>{const d=st[id]||(st[id]={});if(!String(d.fala||'').trim()){d.fala=text;d.audioStatus='speech';d.audioSource='transcricao_informada_pela_usuaria';d.sug=true;d.rev=false;}});
-  musicOnly.forEach(id=>{const d=st[id]||(st[id]={});d.fala='';d.audioStatus='music_only';d.audioSource='informacao_informada_pela_usuaria';d.sug=false;d.rev=false;});
-  st._audioFactsUserV1=true;
+  musicOnly.forEach(id=>{const d=st[id]||(st[id]={});if(!String(d.fala||'').trim()){d.fala='';d.audioStatus='music_only';d.audioSource='informacao_informada_pela_usuaria';d.sug=false;}});
+  st._audioFactsUserV4=true;
   try{localStorage.setItem(SK,JSON.stringify(st))}catch(e){}
 }
 const norm=x=>String(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-const D=v=>st[v.ID]||{};const kwOf=v=>D(v).kw!==undefined?D(v).kw:('bolsa '+String(v.Modelo||'').toLowerCase());
+const MUSIC_ONLY_IDS=new Set(['V02','V03','V04','V05','V06','V07','V08','V10','V11','V13','V14','V15','V16','V17','V18','V19','V20','V21','V22','V23','V24','V26']);
+// IDs informados pela usuária como tendo somente hashtags, sem legenda publicada.
+const NO_CAPTION_IDS=new Set(['V19','V08','V05','V17','V02','V21','V09','V20','V13']);
+const effectiveLeg=(v,d)=>NO_CAPTION_IDS.has(v.ID)&&d.legSource!=='manual'?'':String(d.leg||'');
+const D=v=>{
+  const d=st[v.ID]||(st[v.ID]={}),p=parseCaption(v['Legenda original recebida']);
+  if(!NO_CAPTION_IDS.has(v.ID)&&!String(d.leg||'').trim()&&p&&p.body){d.leg=p.body;d.sug=true;d.rev=false}
+  if(!String(d.tags||'').trim()){
+    const fromCaption=p&&p.tags?p.tags.join(' '):'';
+    const fromSheet=String(v['Hashtags sugeridas']||'').trim();
+    if(fromCaption||fromSheet){d.tags=fromCaption||fromSheet;d.sug=true;d.rev=false}
+  }
+  if(!String(d.fala||'').trim()&&MUSIC_ONLY_IDS.has(v.ID))d.audioStatus='music_only';
+  return d
+};const kwOf=v=>D(v).kw!==undefined?D(v).kw:('bolsa '+String(v.Modelo||'').toLowerCase());
 const BAD=/#(fyp|fy|foryou|foryoupage|parati|paravoce|viral)\b/i;
 const save=()=>{try{localStorage.setItem(SK,JSON.stringify(st))}catch(e){if(typeof setOperationStatus==='function')setOperationStatus('error','Não foi possível salvar o SEO: '+e.message)}};
 const pad=n=>String(n).padStart(2,'0');
@@ -5211,7 +5248,7 @@ const srcOf=(v,pt)=>parseCaption(pt?v['Legenda em português fornecida']:v['Lege
 window.__parseSourceCaption=parseCaption;
 // ---- Pontuação ----
 function seo(v){
-  const d=D(v),fala=String(d.fala||''),leg=String(d.leg||''),tags=String(d.tags||'');
+  const d=D(v),fala=String(d.fala||''),leg=effectiveLeg(v,d),tags=String(d.tags||'');
   if(!fala.trim()&&!leg.trim()&&!tags.trim())return null;
   const w=[];let p3=0,p4=0;
   const kw=norm(kwOf(v)).trim(),nf=norm(fala),c=kw&&nf?nf.split(kw).length-1:0;
@@ -5232,7 +5269,19 @@ function seo(v){
   return {p3,p4,w,pend,falaIgualTela};
 }
 window.__seoPend=v=>{const r=seo(v);return !!(r&&r.pend)};
-window.__seoAll=()=>videos.length>0&&videos.every(v=>{const d=D(v),r=seo(v);return r&&!r.pend&&(String(d.fala||'').trim()||d.audioStatus==='music_only')&&d.leg&&d.tags});
+// A completude admite texto da legenda original quando ela existe; os IDs
+// informados como tendo somente hashtags ficam pendentes até receberem legenda.
+function seoFieldSnapshot(v){
+  const d=D(v),p=parseCaption(v['Legenda original recebida']);
+  const fala=!!String(d.fala||'').trim()||MUSIC_ONLY_IDS.has(v.ID);
+  const legenda=NO_CAPTION_IDS.has(v.ID)||!!effectiveLeg(v,d).trim()||!!(p&&String(p.body||'').trim());
+  const hashtags=!!String(d.tags||'').trim()||!!((p&&p.tags&&p.tags.length)||String(v['Hashtags sugeridas']||'').trim());
+  return {fala,legenda,hashtags};
+}
+window.__seoFieldsReady=v=>{const f=seoFieldSnapshot(v);return f.fala&&f.legenda&&f.hashtags};
+window.__seoFieldGaps=()=>videos.map(v=>({id:v.ID,...seoFieldSnapshot(v)})).filter(x=>!x.fala||!x.legenda||!x.hashtags);
+window.__seoFieldsAll=()=>videos.length>0&&videos.every(v=>window.__seoFieldsReady(v));
+window.__seoAll=()=>videos.length>0&&videos.every(v=>{const d=D(v),r=seo(v),captionKnown=!!effectiveLeg(v,d).trim()||(NO_CAPTION_IDS.has(v.ID)&&!!d.rev);return r&&!r.pend&&(String(d.fala||'').trim()||d.audioStatus==='music_only')&&captionKnown&&d.tags});
 window.__cExt=id=>{if(!window.__seoAll()||!window.__PIL||!window.__PIL[id])return null;const v=videos.find(x=>x.ID===id),r=seo(v),p=window.__PIL[id];return Math.round((p[0]+p[1]+p[2]+r.p3+r.p4)/(58+35)*100)};
 const cell=v=>{const r=seo(v);const sfx=r&&r.pend?' (prévia)':'';return r?[r.p3+'/20'+sfx,r.p4+'/15'+sfx,r.w.join('; ')||'✓ ok']:['—','—','Preencha fala, legenda e hashtags']};
 function revInfo(v){const d=D(v),r=seo(v);
@@ -5249,7 +5298,7 @@ function refreshRow(id){
   if(r){r.children[0].textContent=c[0];r.children[1].textContent=c[1];r.children[2].textContent=c[2]}
   const rc=document.getElementById('seoRev_'+id);if(rc){const i=revInfo(v);rc.querySelector('.rev-pill').className='rev-pill '+i.cls;rc.querySelector('.rev-pill').textContent=i.txt;const cb=rc.querySelector('input');if(cb)cb.checked=!!D(v).rev}
 }
-window.seoSet=function(id,k,val){st[id]=st[id]||{};st[id][k]=val;save();refreshRow(id);updateStatus()};
+window.seoSet=function(id,k,val){st[id]=st[id]||{};st[id][k]=val;if(k==='leg')st[id].legSource=String(val||'').trim()?'manual':'';save();refreshRow(id);updateStatus()};
 window.seoRev=function(id,on){st[id]=st[id]||{};st[id].rev=!!on;save();refreshRow(id);updateStatus();recalcRanking()};
 // ---- Sugestões a partir da fonte (nunca preenchem a fala) ----
 function suggestOne(id,opts){
@@ -5257,7 +5306,7 @@ function suggestOne(id,opts){
   const p=srcOf(v,opts.pt);if(!p)return {filled:[],why:opts.pt?'sem versão em português fornecida':'a fonte não trouxe legenda'};
   st[id]=st[id]||{};const d=st[id],filled=[],keep=[];
   const empty=k=>!String(d[k]||'').trim();
-  if(p.body){if(opts.force||empty('leg')){d.leg=p.body;filled.push('legenda')}else keep.push('legenda')}
+  if(p.body&&!NO_CAPTION_IDS.has(id)){if(opts.force||empty('leg')){d.leg=p.body;d.legSource='source';filled.push('legenda')}else keep.push('legenda')}
   if(p.tags.length){if(opts.force||empty('tags')){d.tags=p.tags.join(' ');filled.push('hashtags')}else keep.push('hashtags')}
   if(!filled.length)return {filled,why:keep.length?'campos já preenchidos foram mantidos':'a fonte não tem legenda nem hashtags aproveitáveis'};
   d.sug=true;d.rev=false;d.sugFonte=opts.pt?'pt':'original';d.sugEm=new Date().toISOString().slice(0,10);
@@ -5275,7 +5324,7 @@ window.seoSuggestAll=function(){
 };
 // Pré-carrega uma vez legendas e hashtags já presentes nas fichas V01–V26.
 // Preserva campos existentes; não toca no catálogo canônico nem na fala.
-if(!st._submittedCaptionsSeededV1){
+if(!st._submittedCaptionsSeededV4){
   let seeded=0;
   videos.forEach(v=>{
     const result=suggestOne(v.ID,{});
@@ -5288,9 +5337,22 @@ if(!st._submittedCaptionsSeededV1){
       d.tagsSource='legenda_original';seeded++;
     }
   });
-  st._submittedCaptionsSeededV1=true;
+  st._submittedCaptionsSeededV4=true;
   save();
 }
+// Recupera lacunas da legenda/hashtags em cada abertura, sem substituir valores existentes.
+videos.forEach(v=>{
+  const d=st[v.ID]||(st[v.ID]={}),p=parseCaption(v['Legenda original recebida']);
+  let changed=false;
+  if(!NO_CAPTION_IDS.has(v.ID)&&!String(d.leg||'').trim()&&p&&p.body){d.leg=p.body;changed=true}
+  if(!String(d.tags||'').trim()){
+    const fromCaption=p&&p.tags?p.tags.join(' '):'';
+    const fromSheet=String(v['Hashtags sugeridas']||'').trim();
+    if(fromCaption||fromSheet){d.tags=fromCaption||fromSheet;changed=true}
+  }
+  if(changed){d.sug=true;d.rev=false}
+});
+save();
 // ---- Fonte original (render) ----
 function renderSourceCaptions(){
   const input=document.getElementById('sourceCaptionSearch');
@@ -5325,17 +5387,18 @@ function renderSeo(){
   const list=videos.slice().sort((a,b)=>a.Ranking-b.Ranking).filter(v=>{
     if(ff==='pendentes')return window.__seoPend(v);
     if(ff==='semfala')return !String(D(v).fala||'').trim();
-    if(ff==='completos'){const r=seo(v);return r&&!r.pend&&D(v).fala&&D(v).leg&&D(v).tags}
+    if(ff==='completos'){const r=seo(v),d=D(v);return r&&!r.pend&&(d.fala||d.audioStatus==='music_only')&&effectiveLeg(v,d)&&d.tags}
     return true});
-  $('#seoRows').innerHTML=list.map(v=>{const c=cell(v),d=D(v),ri=revInfo(v),tela=srcTela(v),p=srcOf(v,false),pt=srcOf(v,true);
+  $('#seoRows').innerHTML=list.map(v=>{const c=cell(v),d=D(v),ri=revInfo(v),tela=srcTela(v),p=srcOf(v,false),pt=srcOf(v,true),visibleLeg=effectiveLeg(v,d);
     const src=`<div class="seo-src"><span class="src-tag">texto na tela · não é fala</span><div class="src-text">${tela?esc(tela):'<i>não enviado na fonte</i>'}</div>
-      ${p&&(p.body||p.tags.length)?`<button type="button" class="link-btn" onclick="seoSuggest('${v.ID}',false)">⬇ Sugerir legenda e hashtags</button>`:'<span class="context">fonte sem legenda/hashtags aproveitáveis</span>'}
+      ${NO_CAPTION_IDS.has(v.ID)?'<span class="context">Material recebido: somente hashtags; legenda não enviada.</span>':''}
+      ${p&&(p.body||p.tags.length)?`<button type="button" class="link-btn" onclick="seoSuggest('${v.ID}',false)">⬇ ${NO_CAPTION_IDS.has(v.ID)?'Usar hashtags da fonte':'Sugerir legenda e hashtags'}</button>`:'<span class="context">fonte sem legenda/hashtags aproveitáveis</span>'}
       ${pt&&(pt.body||pt.tags.length)?`<button type="button" class="link-btn" onclick="seoSuggest('${v.ID}',true)">⬇ Usar versão em português</button>`:''}</div>`;
     return `<tr><td><b>${esc(v.ID)}</b></td><td>${src}</td><td><input aria-label="Palavra-chave ${v.ID}" value="${esc(kwOf(v))}" style="width:120px" oninput="seoSet('${v.ID}','kw',this.value)"></td>
     <td><textarea aria-label="Fala transcrita ${v.ID}" rows="4" style="width:260px" placeholder="Transcreva o que é dito no áudio" oninput="seoSet('${v.ID}','fala',this.value)">${esc(d.fala||'')}</textarea>${d.audioStatus==='music_only'?'<div class="context">♫ Sem fala: apenas música (informação fornecida; confira o áudio)</div>':d.audioSource==='transcricao_informada_pela_usuaria'?'<div class="context">Transcrição informada pela usuária · confira com o áudio</div>':''}</td>
-    <td><textarea aria-label="Legenda ${v.ID}" rows="2" style="width:220px" oninput="seoSet('${v.ID}','leg',this.value)">${esc(d.leg||'')}</textarea></td>
+    <td><textarea aria-label="Legenda ${v.ID}" rows="2" style="width:220px" placeholder="${NO_CAPTION_IDS.has(v.ID)?'Sem legenda publicada (confirmado)':'Legenda do vídeo'}" oninput="seoSet('${v.ID}','leg',this.value)">${esc(visibleLeg)}</textarea>${NO_CAPTION_IDS.has(v.ID)?'<div class="context">Ausência confirmada pela usuária; não inventar legenda.</div>':''}</td>
     <td><input aria-label="Hashtags ${v.ID}" value="${esc(d.tags||'')}" style="width:170px" oninput="seoSet('${v.ID}','tags',this.value)">${d.tagsSource==='hashtags_sugeridas_da_ficha'?'<div class="context">Hashtags sugeridas na ficha · revisar</div>':d.tagsSource==='legenda_original'?'<div class="context">Hashtags da legenda original · revisar</div>':''}</td>
-    <td id="seoRev_${v.ID}"><span class="rev-pill ${ri.cls}">${ri.txt}</span><label class="rev-check"><input type="checkbox"${d.rev?' checked':''} onchange="seoRev('${v.ID}',this.checked)"> Conferi fala (áudio), legenda e hashtags</label></td>
+    <td id="seoRev_${v.ID}"><span class="rev-pill ${ri.cls}">${ri.txt}</span><label class="rev-check"><input type="checkbox"${d.rev?' checked':''} onchange="seoRev('${v.ID}',this.checked)"> ${NO_CAPTION_IDS.has(v.ID)?'Conferi áudio, ausência de legenda e hashtags':'Conferi fala (áudio), legenda e hashtags'}</label></td>
     <td colspan="3" style="padding:0"><table style="width:100%"><tr id="seo_${v.ID}"><td style="width:90px">${c[0]}</td><td style="width:90px">${c[1]}</td><td style="min-width:280px">${esc(c[2])}</td></tr></table></td></tr>`}).join('')||'<tr><td colspan="10" class="context">Nenhum vídeo neste filtro.</td></tr>';
   updateStatus();
 }
@@ -5386,14 +5449,14 @@ const nf=x=>Number(x).toFixed(1).replace('.',',');
 window.renderResumo=function(){
   const v=videos.slice().sort((a,b)=>a.Ranking-b.Ranking),top=v.slice(0,3),last=v[v.length-1];
   const q=(document.getElementById('qaSummary')||{}).innerText||'',n1=document.querySelector('#nextSteps article h4');
-  const falta=[];if(!(window.__viewsAll&&window.__viewsAll()))falta.push('as visualizações públicas dos vídeos');if(!(window.__seoAll&&window.__seoAll()))falta.push('a fala, a legenda e as hashtags dos vídeos');
+  const falta=[];if(!(window.__viewsAll&&window.__viewsAll()))falta.push('preencher as visualizações públicas dos vídeos');if(!(window.__seoFieldsAll&&window.__seoFieldsAll()))falta.push('preencher fala/áudio, legenda e hashtags');else if(!(window.__seoAll&&window.__seoAll()))falta.push('revisar fala/áudio, legenda e hashtags e marcar Conferi');
   const ratio=x=>Number(x.Likes)>0?Math.round(1000*x.Saves/x.Likes)/10:null,best=top[0];
   document.getElementById('resumoRapido').innerHTML=`<b>⏱️ Resumo em 1 minuto</b>
   <p><b>Melhores vídeos agora:</b> ${top.map(x=>`${x.ID} (nota ${nf(x.Nota)})`).join(', ')}. O 1º, ${best.ID}, tem ${ratio(best)===null?'—':String(ratio(best)).replace('.',',')}% de salvamentos por curtida${best['Prova visual']==='Sim'?' e demonstra o produto em uso':''}.</p>
   <p><b>Último colocado:</b> ${last.ID} (nota ${nf(last.Nota)}). Veja a ação recomendada dele na biblioteca.</p>
   <p><b>Alertas de qualidade:</b> ${esc(q||'—')}</p>
   <p><b>Padrão mais promissor:</b> ${n1?esc(n1.textContent.replace(/^\d+\.\s*/,'')):'ainda sem amostra suficiente'}.</p>
-  <p><b>Próximo passo:</b> ${falta.length?'preencher '+falta.join(' e ')+', para o ranking ficar mais justo.':'gravar o teste da seção Decisão Final.'}</p>`;
+  <p><b>Próximo passo:</b> ${falta.length?falta.join(' e ')+', para o ranking ficar mais justo.':'gravar o teste da seção Decisão Final.'}</p>`;
 };
 const _rk2=recalcRanking;window.recalcRanking=recalcRanking=function(){_rk2();renderResumo()};
 const _rt2=renderTrust;window.renderTrust=renderTrust=function(){_rt2();renderResumo()};
@@ -5453,9 +5516,10 @@ window.__analiseLoad=(a,replace)=>{[['seo','__seoSt','mafe_radar_seo_v1'],['ret'
 // ---- progresso
 function renderProgress(){
   const N=videos.length,meta=window.__trustMeta(),seo=window.__seoSt();
-  const it=[['Visualizações públicas',videos.filter(v=>Number(v.Views)>0).length],['Fala, legenda e hashtags (revisadas)',videos.filter(v=>{const d=seo[v.ID]||{};return d.fala&&d.leg&&d.tags&&!(window.__seoPend&&window.__seoPend(v))}).length],['Linha do tempo de retenção',window.__retDone()],['Confiabilidade (origem, data e confirmação)',videos.filter(v=>{const m=meta[v.ID];return m&&m.origem!=='desconhecido'&&m.coleta&&m.confirmado}).length]];
+  const it=[['Visualizações públicas',videos.filter(v=>Number(v.Views)>0).length],['Fala/áudio, legenda/status e hashtags registrados',videos.filter(v=>window.__seoFieldsReady&&window.__seoFieldsReady(v)).length],['Linha do tempo de retenção',window.__retDone()],['Confiabilidade (origem, data e confirmação)',videos.filter(v=>{const m=meta[v.ID];return m&&m.origem!=='desconhecido'&&m.coleta&&m.confirmado}).length]];
   const pc=Math.round(100*it.reduce((s,x)=>s+x[1]/N,0)/it.length);
-  $$('progressoAnalise').innerHTML=`<b>📈 Completude da análise: ${pc}%</b><p style="margin:2px 0 6px">Quanto mais completo, mais justo e confiável o ranking.</p>`+it.map(x=>`<div style="display:flex;align-items:center;gap:8px;margin:3px 0"><span style="min-width:260px">${x[0]}</span><progress value="${x[1]}" max="${N}" style="flex:1"></progress><span>${x[1]}/${N}</span></div>`).join('');
+  const gaps=window.__seoFieldGaps?window.__seoFieldGaps():[];
+  $$('progressoAnalise').innerHTML=`<b>📈 Completude da análise: ${pc}%</b><p style="margin:2px 0 6px">Este indicador verifica fala transcrita ou música sem fala informada, legenda ou ausência confirmada, e hashtags. Nos vídeos sem legenda, a ausência registrada conta como dado completo; não significa que exista texto para pontuar em SEO. Para entrar na nota, revise o áudio, os dados disponíveis e marque “Conferi”.</p>`+it.map(x=>`<div style="display:flex;align-items:center;gap:8px;margin:3px 0"><span style="min-width:260px">${x[0]}</span><progress value="${x[1]}" max="${N}" style="flex:1"></progress><span>${x[1]}/${N}</span></div>`).join('')+(gaps.length?`<p role="status" style="margin:6px 0 0;color:#8a3b12"><b>Campos ainda ausentes:</b> ${gaps.map(x=>`${x.id} (${[!x.fala?'fala/áudio':'',!x.legenda?'legenda':'',!x.hashtags?'hashtags':''].filter(Boolean).join(', ')})`).join('; ')}.</p>`:'<p role="status" style="margin:6px 0 0;color:#176b47"><b>Fala/áudio, status da legenda e hashtags registrados para os 26 vídeos.</b> A revisão “Conferi” continua separada e é necessária antes de pontuar.</p>');
 }
 // ---- sensibilidade
 function renderSens(){
