@@ -105,7 +105,13 @@
 @media(max-width:600px){.decision-shortcuts{grid-template-columns:1fr}}
 </style>
 
-</head><body>
+<style>
+.skip-link{position:absolute;top:8px;left:8px;z-index:10000;transform:translateY(-160%);padding:10px 14px;background:#fff;color:#003b80;border:2px solid #003b80;border-radius:6px;font-weight:700}
+.skip-link:focus{transform:translateY(0)}
+:focus-visible{outline:3px solid #075ecc;outline-offset:2px}
+@supports (content-visibility:auto){#conteudo-principal>section:nth-of-type(n+3){content-visibility:auto;contain-intrinsic-size:auto 900px}}
+</style>
+</head><body><a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
 <!-- Versão autônoma: fontes do sistema e gráficos HTML/CSS, sem CDNs. -->
 <script>window.chartJsLoadError = true;</script>
 <style>
@@ -507,7 +513,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
       <a href="#comparacao-grupos" onclick="setActiveArea('analisar')">⚖️ Comparação Equivalente</a>
       <a href="#comparar-videos" onclick="setActiveArea('analisar')">🔍 Comparar Vídeos</a>
       <a href="#seo-legenda" onclick="setActiveArea('analisar')">🗣️ SEO, Legenda & CTA</a>
-      <a href="#linha-tempo" onclick="setActiveArea('analisar')">⏱️ Linha do Tempo</a>
+      <a href="#linha-tempo" onclick="setActiveArea('analisar')">⏱️ Etapas do Conteúdo</a>
       <a href="#matriz-quadrantes" onclick="setActiveArea('analisar')">🎯 Matriz Criativo × Engajamento</a>
       <a href="#sensibilidade" onclick="setActiveArea('analisar')">⚖️ Sensibilidade do Ranking</a>
       <a href="#padroes" onclick="setActiveArea('analisar')">🔥 Padrões Recorrentes</a>
@@ -942,8 +948,9 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <div class="section-head"><div><h2>🛡️ Confiabilidade dos Dados & Nível de Evidência</h2><p>Cada vídeo registra origem dos dados, data da coleta, período observado e confirmação humana. Dado incerto pesa menos nas comparações e nos planos; nenhum vídeo vira “vencedor” sem evidência.</p></div></div>
   <article class="card">
     <div id="trustSummary" class="analysis-note"></div>
-    <div class="tablewrap"><table class="script-table" style="min-width:920px"><thead><tr><th>Vídeo</th><th>Tipo</th><th>Origem dos dados</th><th>Data da coleta</th><th>Publicado em</th><th>Idade na coleta (dias)</th><th>Tráfego</th><th>Confirmado por humano</th><th>Confiabilidade</th><th>Nível de evidência</th></tr></thead><tbody id="trustRows"></tbody></table></div>
+    <div class="tablewrap"><table class="script-table" style="min-width:1180px"><thead><tr><th>Vídeo</th><th>Tipo</th><th>Origem dos dados</th><th>Data da coleta</th><th style="min-width:230px">Evidência da coleta<br><small>link ou nota</small></th><th>Publicado em</th><th>Idade na coleta (dias)</th><th>Tráfego</th><th>Confirmado por humano</th><th>Confiabilidade</th><th>Nível de evidência</th></tr></thead><tbody id="trustRows"></tbody></table></div>
     <p class="context"><b>Tráfego:</b> não foi possível confirmar se estas referências receberam distribuição orgânica ou paga. Os 26 registros ficam como <b>Não informado</b>; não estime nem altere essa classificação sem evidência. Isso não é erro de preenchimento, mas limita comparações por tipo de distribuição.</p>
+    <p class="context"><b>Evidência:</b> registre um link, nome de captura ou nota sobre a fonte consultada. O HTML guarda esse texto neste navegador e o inclui no backup; ele não anexa imagens nem publica as evidências automaticamente.</p>
     <p class="context"><b>Índice (0–1)</b> = peso da origem (manual 0,9 · OCR 0,6 · calculada 0,5 · desconhecida 0,15) × confirmação (1,0 se confirmado, 0,7 se não) × data de coleta (0,85 se ausente) × completude das 4 métricas disponíveis (0,5 a 1,0). Alta ≥ 0,70 · Média ≥ 0,40 · Baixa &lt; 0,40. A origem é registrada por vídeo (vale para todas as suas métricas). <b>Níveis:</b> <i>Sinal inicial</i> (dado incerto ou incompleto) · <i>Promissor</i> (dados confiáveis e engajamento bruto acima da mediana do catálogo) · <i>Replicado</i> (resultado promissor confirmado e repetido em outro vídeo do mesmo formato e modelo).</p>
   </article>
 </section>
@@ -991,10 +998,10 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <div class="tablewrap"><table class="script-table" style="min-width:1700px"><thead><tr><th>Vídeo</th><th style="min-width:210px">Fonte original<br><small>texto na tela ≠ fala</small></th><th>Palavra-chave</th><th>Fala (transcrição do áudio)</th><th>Legenda</th><th>Hashtags</th><th style="min-width:190px">Revisão humana</th><th>Pilar 3 /20</th><th>Pilar 4 /15</th><th>Avisos</th></tr></thead><tbody id="seoRows"></tbody></table></div></article>
 </section>
 <section id="linha-tempo">
-  <div class="section-head"><div><h2>⏱️ Linha do Tempo de Retenção</h2><p>O que acontece em cada etapa do vídeo: gancho (0–3s), promessa (3–8s), demonstração (8–20s), prova (20–35s) e CTA (35–45s).</p></div></div>
-  <details class="didatico sec" open><summary>📖 Como ler esta seção</summary><p><b>Para que serve:</b> Ver quais etapas da receita cada vídeo cumpre e quais faltam mais no conjunto.</p><p><b>Como ler:</b> Marque Sim ou Não em cada etapa. Etapas além da duração do vídeo aparecem como “—”. Gancho e demonstração vêm pré-preenchidos pela análise visual; as demais precisam da sua conferência.</p><p><b>O que fazer:</b> Foque na etapa que mais falta no conjunto: é onde o próximo vídeo mais pode melhorar.</p></details>
+  <div class="section-head"><div><h2>⏱️ Etapas do Conteúdo — checklist visual</h2><p>Registra em que etapas aparecem gancho, promessa, demonstração, prova e CTA. É um indicador criativo que pode orientar hipóteses de retenção; não mede a retenção real da audiência nem a curva de espectadores do TikTok.</p></div></div>
+  <details class="didatico sec" open><summary>📖 Como ler esta seção</summary><p><b>Para que serve:</b> Registrar quais elementos do roteiro aparecem em cada etapa e levantar hipóteses para novos vídeos.</p><p><b>Como ler:</b> “Sim/Não” descreve presença do elemento no conteúdo, não quantas pessoas assistiram. Os valores iniciais vêm da planilha de análise; “Sim (fraco)” foi registrado como “Sim”. Etapas que ultrapassam a duração aparecem como “—”. V05 e V17 permanecem como publicações separadas, embora sejam o mesmo criativo.</p><p><b>O que fazer:</b> Use a etapa menos presente para formular o próximo teste. Para medir retenção real, informe métricas/curva obtidas nas análises do TikTok.</p></details>
   <article class="card"><div id="retSummary" class="analysis-note"></div>
-  <div class="tablewrap"><table class="script-table" style="min-width:820px"><thead><tr><th>Vídeo</th><th>Duração</th><th>0–3s Gancho</th><th>3–8s Promessa</th><th>8–20s Demonstração</th><th>20–35s Prova</th><th>35–45s CTA</th><th>Cumpridas</th></tr></thead><tbody id="retRows"></tbody></table></div></article>
+  <div class="tablewrap"><table class="script-table" style="min-width:820px"><thead><tr><th>Vídeo</th><th>Duração</th><th>0–3s Gancho</th><th>3–8s Promessa</th><th>8–20s Demonstração</th><th>20–35s Prova</th><th>35–45s CTA</th><th>Etapas presentes</th></tr></thead><tbody id="retRows"></tbody></table></div></article>
 </section>
 <section id="matriz-quadrantes">
   <div class="section-head"><div><h2>🎯 Matriz Criativo × Engajamento Público</h2><p>Cada ponto é um vídeo: quanto mais à direita, melhor o potencial criativo; quanto mais alto, maior o engajamento público observado. Nenhum eixo mede vendas.</p></div></div>
@@ -4760,7 +4767,7 @@ refreshUndoImportButton();
 </script>
 
 <script type="application/json" id="mafeReferenceTrustData">
-{"collectionDate":"2026-10-21","references":{"V01":"2026-07-03","V02":"2026-05-12","V03":"2026-08-14","V04":"2026-09-06","V05":"2026-04-12","V06":"2026-04-18","V07":"2026-03-24","V08":"2026-07-16","V09":"2026-07-08","V10":"2025-05-05","V11":"2026-03-02","V12":"2026-01-10","V13":"2026-07-02","V14":"2026-06-20","V15":"2025-04-03","V16":"2026-01-26","V17":"2026-04-12","V18":"2025-08-13","V19":"2026-07-11","V20":"2026-07-20","V21":"2026-05-30","V22":"2026-09-01","V23":"2025-04-07","V24":"2025-07-19","V25":"2024-11-11","V26":"2026-04-03"}}
+{"collectionDate":"2026-10-21","references":{"V01":"2026-07-03","V02":"2026-05-12","V03":"2026-08-14","V04":"2026-09-06","V05":"2026-04-12","V06":"2026-04-18","V07":"2026-03-24","V08":"2026-07-16","V09":"2026-07-08","V10":"2025-05-05","V11":"2026-03-02","V12":"2026-01-10","V13":"2026-07-02","V14":"2026-06-20","V15":"2025-04-03","V16":"2026-01-26","V17":"2026-04-12","V18":"2025-08-13","V19":"2026-07-11","V20":"2026-07-20","V21":"2026-05-30","V22":"2026-09-01","V23":"2025-04-07","V24":"2025-07-19","V25":"2024-11-11","V26":"2026-04-03"},"videoLinks":{"V01":"https://www.tiktok.com/@cintiapeople/video/7658308014180470034?_r=1&_t=ZS-9AAWZ4IyHkW","V02":"https://www.tiktok.com/@nagomesx/video/7639090912273911047?_r=1&_t=ZS-9AAWd1NrrNw","V03":"https://www.tiktok.com/@atnorah/video/7673803024405499150?_r=1&_t=ZS-9AAWfP5XhjO","V04":"https://www.tiktok.com/@jaquemarumbi/video/7682495970872970503?_r=1&_t=ZS-9AAWhsERLuS","V05":"https://www.tiktok.com/@le_indicaa/video/7627838606110969096?_r=1&_t=ZS-9AAWiWgGyX4","V06":"https://www.tiktok.com/@nagomesx/video/7629848883945868551?_r=1&_t=ZS-9AAWlXGNgxk","V07":"https://www.tiktok.com/@atnorah/video/7620798774008433934?_r=1&_t=ZS-9AAWmctBSPn","V08":"https://www.tiktok.com/@nagomesx/video/7663166955427351829?_r=1&_t=ZS-9AAWnPaY2FD","V09":"https://www.tiktok.com/@dailydalaury/video/7660335732095012104?_r=1&_t=ZS-9AAWqDyD411","V10":"https://www.tiktok.com/@shaigurrrl/video/7500829289231748370?_r=1&_t=ZS-9AAWs6lazV1","V11":"https://www.tiktok.com/@mollycozy/video/7612636405969194270?_r=1&_t=ZS-9AAWu4lNWaN","V12":"https://www.tiktok.com/@manuellapeixotto_/video/7593904283364609288?_r=1&_t=ZS-9AAWuOtUriC","V13":"https://www.tiktok.com/@nagomesx/video/7657707137560251669?_r=1&_t=ZS-9AAWw9uJTLr","V14":"https://www.tiktok.com/@thecarryedit/video/7653398894100892936?_r=1&_t=ZS-9AAX0VR19ho","V15":"https://www.tiktok.com/@isabelaandrade29/video/7489172340136250630?_r=1&_t=ZS-9AAXBqGy1Xb","V16":"https://www.tiktok.com/@giuliaalvesx/video/7599665630270295316?_r=1&_t=ZS-9AAXEw8ON50","V17":"https://www.tiktok.com/@le_indicaa/video/7627838606110969096?_r=1&_t=ZS-9AAXKjM2jXc","V18":"https://www.tiktok.com/@_oum4ima_/video/7537983797510409494?_r=1&_t=ZS-9AAXN1ZLk70","V19":"https://www.tiktok.com/@raynarasecundaria/video/7661323088977612050?_r=1&_t=ZS-9AAXPzUYtDW","V20":"https://www.tiktok.com/@nagomesx/video/7664412422416993557?_r=1&_t=ZS-9AAXS1T3O2J","V21":"https://www.tiktok.com/@ajuliaalvesm/video/7645308960051875079?_r=1&_t=ZS-9AAXScprj0C","V22":"https://www.tiktok.com/@shopcreatorana/video/7680579481366547733?_r=1&_t=ZS-9AAXUVfnu8Q","V23":"https://www.tiktok.com/@coldbrew.sc/video/7490577161074576648?_r=1&_t=ZS-9AAXWjvaqrH","V24":"https://www.tiktok.com/@larissalves___/video/7528871236802186502?_r=1&_t=ZS-9AAXaPuKhXU","V25":"https://www.tiktok.com/@marifariaz/video/7436148393694465335?_r=1&_t=ZS-9AAauL3nBea","V26":"https://www.tiktok.com/@clarisasaaaaa/video/7624368751215250709?_r=1&_t=ZS-9AAbeCCMWtm"}}
 </script>
 <script>
 // Aplica os metadados fornecidos pela usuária uma única vez, sem alterar funções ou o catálogo canônico.
@@ -4801,6 +4808,25 @@ refreshUndoImportButton();
 })();
 </script>
 <script>
+// Preenche a evidência com o link da publicação; mantém anotações já salvas.
+(function(){
+  const marker='radarMafe_reference_video_links_v1';
+  try {
+    if(localStorage.getItem(marker)==='1') return;
+    const data=JSON.parse(document.getElementById('mafeReferenceTrustData').textContent);
+    const key='mafe_radar_confiab_v1';
+    const meta=JSON.parse(localStorage.getItem(key)||'{}')||{};
+    Object.entries(data.videoLinks||{}).forEach(([id,url])=>{
+      const previous=meta[id]&&typeof meta[id]==='object'?meta[id]:{};
+      const current=String(previous.evidencia||'').trim();
+      if(!current) previous.evidencia=url;
+      else if(!current.includes(url)) previous.evidencia=current+' | '+url;
+      meta[id]=previous;
+    });
+    localStorage.setItem(key,JSON.stringify(meta));
+    localStorage.setItem(marker,'1');
+  } catch(e) { /* armazenamento indisponível não interrompe o sistema */ }
+})();
 // --- MELHORIAS: confiabilidade, evidência, comparação, planos, A/B e financeiro ---
 (function(){
 const TK='mafe_radar_confiab_v1';
@@ -4837,11 +4863,12 @@ function evid(v){
 window.trustSet=function(id,k,val){const v=videos.find(x=>x.ID===id);if(!v)return;if(isProtectedReference(id)&&k==='tipo'&&val==='proprio'){uiToast('V01–V26 são referências e não podem ser registrados como vídeos próprios.','warn');renderTrust();return}const m=M(v);m[k]=k==='confirmado'?!!val:val;if(k==='publicado'||k==='periodo')delete m.publicadoFonte;if((k==='coleta'||k==='publicado')&&m.coleta&&m.publicado){const d=Math.round((new Date(m.coleta)-new Date(m.publicado))/864e5);if(d>=0)m.periodo=String(d)}try{localStorage.setItem(TK,JSON.stringify(meta))}catch(e){setOperationStatus('error','Não foi possível salvar a confiabilidade: '+e.message)}renderTrust()};
 function renderTrustTable(){
   const l=videos.slice().sort((a,b)=>a.Ranking-b.Ranking),cnt=[0,0,0,0];
-  $('#trustRows').innerHTML=l.map(v=>{const m=M(v),r=rel(v),t=tier(r),e=evid(v);cnt[e.n]++;
+  $('#trustRows').innerHTML=l.map(v=>{const m=M(v),r=rel(v),t=tier(r),e=evid(v);cnt[e.n]++;const evidenceUrl=(String(m.evidencia||'').match(/https:\/\/[^\s<>"']+/)||[])[0];
     return `<tr><td><b>${esc(v.ID)}</b>${v.Exemplo?' <span class="provenance-tag prov-unk">exemplo</span>':''}</td>
     <td><select aria-label="Tipo de ${esc(v.ID)}" onchange="trustSet('${esc(v.ID)}','tipo',this.value)"><option value="referencia"${isProtectedReference(v.ID)||m.tipo!=='proprio'?' selected':''}>Referência (de terceiros)</option><option value="proprio"${!isProtectedReference(v.ID)&&m.tipo==='proprio'?' selected':''}>Próprio da Mafê</option></select></td>
     <td><select aria-label="Origem dos dados de ${esc(v.ID)}" onchange="trustSet('${esc(v.ID)}','origem',this.value)">${Object.entries(ORI).map(([k,x])=>`<option value="${k}"${m.origem===k?' selected':''}>${x[0]}</option>`).join('')}</select></td>
     <td><input type="date" aria-label="Data da coleta de ${esc(v.ID)}" value="${esc(m.coleta)}" onchange="trustSet('${esc(v.ID)}','coleta',this.value)"></td>
+    <td><input type="text" maxlength="500" aria-label="Evidência da coleta de ${esc(v.ID)}" placeholder="Link do vídeo/captura ou nota" value="${esc(m.evidencia||'')}" onchange="trustSet('${esc(v.ID)}','evidencia',this.value)">${evidenceUrl?` <a class="btn" href="${esc(evidenceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir publicação de ${esc(v.ID)}">Abrir vídeo</a>`:''}</td>
     <td><input type="date" aria-label="Data de publicação de ${esc(v.ID)}" value="${esc(m.publicado||'')}" onchange="trustSet('${esc(v.ID)}','publicado',this.value)"></td>
     <td><input type="number" aria-label="Idade de ${esc(v.ID)} na coleta (dias)" min="0" step="1" style="width:70px" value="${esc(m.periodo)}" onchange="trustSet('${esc(v.ID)}','periodo',this.value)"></td>
     <td><select aria-label="Tráfego de ${esc(v.ID)}" onchange="trustSet('${esc(v.ID)}','trafego',this.value)">${[['nao_informado','Não informado'],['organico','Orgânico'],['pago','Pago']].map(([k,n])=>`<option value="${k}"${m.trafego===k?' selected':''}>${n}</option>`).join('')}</select></td>
@@ -5477,6 +5504,7 @@ window.renderResumo=function(){
   <p><b>Melhores vídeos agora:</b> ${top.map(x=>`${x.ID} (nota ${nf(x.Nota)})`).join(', ')}. O 1º, ${best.ID}, tem ${ratio(best)===null?'—':String(ratio(best)).replace('.',',')}% de salvamentos por curtida${best['Prova visual']==='Sim'?' e demonstra o produto em uso':''}.</p>
   <p><b>Último colocado:</b> ${last.ID} (nota ${nf(last.Nota)}). Veja a ação recomendada dele na biblioteca.</p>
   <p><b>Alertas de qualidade:</b> ${esc(q||'—')}</p>
+  <p><b>Limites dos dados:</b> tráfego das referências não confirmado; V05 e V17 são o mesmo criativo em publicações separadas. As notas descrevem potencial e engajamento público, não vendas.</p>
   <p><b>Padrão mais promissor:</b> ${n1?esc(n1.textContent.replace(/^\d+\.\s*/,'')):'ainda sem amostra suficiente'}.</p>
   <p><b>Próximo passo:</b> ${falta.length?falta.join(' e ')+', para o ranking ficar mais justo.':'gravar o teste da seção Decisão Final.'}</p>`;
 };
@@ -5523,7 +5551,7 @@ window.retSet=function(id,i,val){rs[id]=rs[id]||{};rs[id][i]=val;try{localStorag
 const retCount=v=>{let a=0,k=0;ST.forEach((_,i)=>{if(app(v,i)){a++;if(rget(v,i)==='s')k++}});return k+'/'+a};
 function retSummary(){const out=ST.map((st,i)=>{let n=0,y=0;videos.forEach(v=>{if(!app(v,i))return;const g=rget(v,i);if(g){n++;if(g==='s')y++}});return {st,n,y,p:n?y/n:null}});
   const w=out.filter(o=>o.n>=3).sort((a,b)=>a.p-b.p)[0];
-  $$('retSummary').innerHTML=out.map(o=>`<b>${o.st[1]}</b> ${o.p===null?'—':Math.round(o.p*100)+'%'} (${o.n} vídeos)`).join(' · ')+(w?`<br><b>Etapa que mais falta no conjunto:</b> ${w.st[1]} (${w.st[0]}), cumprida em ${Math.round(w.p*100)}% dos vídeos avaliados.`:'<br>Preencha ao menos 3 vídeos por etapa para ver a etapa mais fraca.')}
+  $$('retSummary').innerHTML='<b>Presença das etapas no conteúdo — não é retenção de audiência:</b> '+out.map(o=>`<b>${o.st[1]}</b> ${o.p===null?'—':'presente em '+Math.round(o.p*100)+'%'} (${o.n} vídeos avaliados)`).join(' · ')+(w?`<br><b>Etapa menos presente:</b> ${w.st[1]} (${w.st[0]}), em ${Math.round(w.p*100)}% dos vídeos avaliados.`:'<br>Preencha ao menos 3 vídeos por etapa para ver a etapa menos presente.')}
 function renderRet(){$$('retRows').innerHTML=videos.slice().sort((a,b)=>a.Ranking-b.Ranking).map(v=>`<tr><td><b>${v.ID}</b></td><td>${dur(v)||'—'}s</td>${ST.map((_,i)=>app(v,i)?`<td><select aria-label="${v.ID}: ${ST[i][1]}" onchange="retSet('${v.ID}',${i},this.value)"><option value="">—</option><option value="s"${rget(v,i)==='s'?' selected':''}>Sim</option><option value="n"${rget(v,i)==='n'?' selected':''}>Não</option></select></td>`:'<td>—</td>').join('')}<td id="retc_${v.ID}">${retCount(v)}</td></tr>`).join('');retSummary()}
 // ---- Comparação lado a lado
 const fm=x=>x===null||x===undefined||!Number.isFinite(x)?'—':x.toLocaleString('pt-BR',{maximumFractionDigits:1});
@@ -5555,7 +5583,7 @@ window.__analiseLoad=(a,replace)=>{[['seo','__seoSt','mafe_radar_seo_v1'],['ret'
 // ---- progresso
 function renderProgress(){
   const N=videos.length,meta=window.__trustMeta(),seo=window.__seoSt();
-  const it=[['Visualizações públicas',videos.filter(v=>Number(v.Views)>0).length],['Fala/áudio, legenda/status e hashtags registrados',videos.filter(v=>window.__seoFieldsReady&&window.__seoFieldsReady(v)).length],['Linha do tempo de retenção',window.__retDone()],['Confiabilidade (origem, data e confirmação)',videos.filter(v=>{const m=meta[v.ID];return m&&m.origem!=='desconhecido'&&m.coleta&&m.confirmado}).length]];
+  const it=[['Visualizações públicas',videos.filter(v=>Number(v.Views)>0).length],['Fala/áudio, legenda/status e hashtags registrados',videos.filter(v=>window.__seoFieldsReady&&window.__seoFieldsReady(v)).length],['Etapas do conteúdo revisadas',window.__retDone()],['Confiabilidade (origem, data e confirmação)',videos.filter(v=>{const m=meta[v.ID];return m&&m.origem!=='desconhecido'&&m.coleta&&m.confirmado}).length]];
   const pc=Math.round(100*it.reduce((s,x)=>s+x[1]/N,0)/it.length);
   const gaps=window.__seoFieldGaps?window.__seoFieldGaps():[];
   $$('progressoAnalise').innerHTML=`<b>📈 Completude da análise: ${pc}%</b><p style="margin:2px 0 6px">Este indicador verifica fala transcrita ou música sem fala informada, legenda ou ausência confirmada, e hashtags. Nos vídeos sem legenda, a ausência registrada conta como dado completo; não significa que exista texto para pontuar em SEO. Para entrar na nota, revise o áudio, os dados disponíveis e marque “Conferi”.</p>`+it.map(x=>`<div style="display:flex;align-items:center;gap:8px;margin:3px 0"><span style="min-width:260px">${x[0]}</span><progress value="${x[1]}" max="${N}" style="flex:1"></progress><span>${x[1]}/${N}</span></div>`).join('')+(gaps.length?`<p role="status" style="margin:6px 0 0;color:#8a3b12"><b>Campos ainda ausentes:</b> ${gaps.map(x=>`${x.id} (${[!x.fala?'fala/áudio':'',!x.legenda?'legenda':'',!x.hashtags?'hashtags':''].filter(Boolean).join(', ')})`).join('; ')}.</p>`:'<p role="status" style="margin:6px 0 0;color:#176b47"><b>Fala/áudio, status da legenda e hashtags registrados para os 26 vídeos.</b> A revisão “Conferi” continua separada e é necessária antes de pontuar.</p>');
@@ -5572,7 +5600,7 @@ function relatorio(){
   const v=videos.slice().sort((a,b)=>a.Ranking-b.Ranking),li=(x)=>`${x.Ranking}º ${x.ID} — nota ${nf(x.Nota)} — ${x['Ação recomendada']||''}`;
   const q=($$('qaSummary')||{}).innerText||'',nx=[...document.querySelectorAll('#nextSteps article')].map(a=>'- '+a.innerText.split('\n').filter(Boolean).slice(0,2).join(' | ')).join('\n'),ret=($$('retSummary')||{}).innerText||'';
   const st=[];[...document.querySelectorAll('#sensRows tr')].forEach(tr=>{const c=tr.children;if(c[8]&&/Inst/.test(c[8].innerText))st.push(c[0].innerText)});
-  return `# Radar Criativo Mafê — Relatório de Análise\nData: ${new Date().toLocaleDateString('pt-BR')}\n\n## Melhores vídeos\n${v.slice(0,5).map(li).join('\n')}\n\n## Últimos colocados\n${v.slice(-3).map(li).join('\n')}\n\n## Qualidade dos dados\n${q}\n\n## Linha do tempo de retenção\n${ret}\n\n## O que gravar a seguir\n${nx||'Sem padrão com amostra mínima.'}\n\n## Posições instáveis (dependem dos pesos)\n${st.join(', ')||'nenhuma'}\n\n## Limites\nNota = ${Math.round((window.__wC??.6)*100)}% criativo + ${100-Math.round((window.__wC??.6)*100)}% desempenho (contagens, sem visualizações quando não informadas). Vídeos de referência não têm cliques, pedidos ou vendas: este relatório compara potencial criativo e engajamento público, não indica qual vídeo vendeu mais nem qual técnica causou vendas. Dados ainda exploratórios até a validação (origem, confirmação, períodos) ser concluída.\n`;
+  return `# Radar Criativo Mafê — Relatório de Análise\nData: ${new Date().toLocaleDateString('pt-BR')}\n\n## Melhores vídeos\n${v.slice(0,5).map(li).join('\n')}\n\n## Últimos colocados\n${v.slice(-3).map(li).join('\n')}\n\n## Qualidade dos dados\n${q}\n\n## Etapas do conteúdo (indicador criativo; não mede retenção da audiência)\n${ret}\n\n## O que gravar a seguir\n${nx||'Sem padrão com amostra mínima.'}\n\n## Posições instáveis (dependem dos pesos)\n${st.join(', ')||'nenhuma'}\n\n## Limites\nNota = ${Math.round((window.__wC??.6)*100)}% criativo + ${100-Math.round((window.__wC??.6)*100)}% desempenho (contagens, sem visualizações quando não informadas). Vídeos de referência não têm cliques, pedidos ou vendas: este relatório compara potencial criativo e engajamento público, não indica qual vídeo vendeu mais nem qual técnica causou vendas. Dados ainda exploratórios até a validação (origem, confirmação, períodos) ser concluída.\n`;
 }
 window.copiarRelatorio=function(){const t=relatorio();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>setOperationStatus('success','Relatório copiado.')).catch(()=>setOperationStatus('error','Não foi possível copiar automaticamente; use “Baixar relatório”.'))};
 window.baixarRelatorio=function(){safeDownload('relatorio_analise_radar_criativo.md', relatorio(), 'text/markdown')};
