@@ -943,6 +943,7 @@ code{overflow-wrap:anywhere;word-break:break-word}
   <article class="card">
     <div id="trustSummary" class="analysis-note"></div>
     <div class="tablewrap"><table class="script-table" style="min-width:920px"><thead><tr><th>Vídeo</th><th>Tipo</th><th>Origem dos dados</th><th>Data da coleta</th><th>Publicado em</th><th>Idade na coleta (dias)</th><th>Tráfego</th><th>Confirmado por humano</th><th>Confiabilidade</th><th>Nível de evidência</th></tr></thead><tbody id="trustRows"></tbody></table></div>
+    <p class="context"><b>Tráfego:</b> não foi possível confirmar se estas referências receberam distribuição orgânica ou paga. Os 26 registros ficam como <b>Não informado</b>; não estime nem altere essa classificação sem evidência. Isso não é erro de preenchimento, mas limita comparações por tipo de distribuição.</p>
     <p class="context"><b>Índice (0–1)</b> = peso da origem (manual 0,9 · OCR 0,6 · calculada 0,5 · desconhecida 0,15) × confirmação (1,0 se confirmado, 0,7 se não) × data de coleta (0,85 se ausente) × completude das 4 métricas disponíveis (0,5 a 1,0). Alta ≥ 0,70 · Média ≥ 0,40 · Baixa &lt; 0,40. A origem é registrada por vídeo (vale para todas as suas métricas). <b>Níveis:</b> <i>Sinal inicial</i> (dado incerto ou incompleto) · <i>Promissor</i> (dados confiáveis e engajamento bruto acima da mediana do catálogo) · <i>Replicado</i> (resultado promissor confirmado e repetido em outro vídeo do mesmo formato e modelo).</p>
   </article>
 </section>
@@ -4782,6 +4783,24 @@ refreshUndoImportButton();
 })();
 </script>
 <script>
+// A usuária não consegue confirmar o tipo de tráfego: manter V01–V26 como não informado uma única vez.
+(function(){
+  const marker='radarMafe_reference_traffic_unknown_v1';
+  try {
+    if(localStorage.getItem(marker)==='1') return;
+    const data=JSON.parse(document.getElementById('mafeReferenceTrustData').textContent);
+    const key='mafe_radar_confiab_v1';
+    const meta=JSON.parse(localStorage.getItem(key)||'{}')||{};
+    Object.keys(data.references).forEach(id=>{
+      const previous=meta[id]&&typeof meta[id]==='object'?meta[id]:{};
+      meta[id]=Object.assign({},previous,{trafego:'nao_informado',trafegoFonte:'informada_pela_usuaria_nao_consegue_confirmar'});
+    });
+    localStorage.setItem(key,JSON.stringify(meta));
+    localStorage.setItem(marker,'1');
+  } catch(e) { /* armazenamento indisponível não interrompe o sistema */ }
+})();
+</script>
+<script>
 // --- MELHORIAS: confiabilidade, evidência, comparação, planos, A/B e financeiro ---
 (function(){
 const TK='mafe_radar_confiab_v1';
@@ -4915,7 +4934,10 @@ const PIL=window.__PIL={V25:[24,15,7,79,69.7,75.3,7.5],V08:[22,15,8,78,43.0,64.0
 window.renderAlerts=function(){
   const A=[],add=(sev,t,ids)=>{if(ids.length)A.push({sev,t,ids:[...new Set(ids)]})};
   const seen={},dup=[];videos.forEach(v=>{const k=[v.Produto,v['Tempo (s)'],v.Formato].join('|');if(seen[k])dup.push(seen[k],v.ID);else seen[k]=v.ID});
-  add('Alta','Possível vídeo duplicado (mesmo produto, duração e formato). Duplicados distorcem rankings e padrões.',dup);
+  const knownDuplicateIds=['V05','V17'];
+  const onlyKnownDuplicate=dup.length===2&&knownDuplicateIds.every(id=>dup.includes(id));
+  if(onlyKnownDuplicate)add('Média','V05 e V17 são o mesmo criativo em registros separados. Permanecem separados conforme solicitado; compare métricas por registro, mas conte como uma peça criativa ao avaliar padrões.',knownDuplicateIds);
+  else add('Alta','Possível vídeo duplicado (mesmo produto, duração e formato). Duplicados distorcem rankings e padrões.',dup);
   const eng=[];videos.forEach(v=>{const calculated=calcEng(v),recorded=num(v.Eng);if(calculated!==null&&recorded!==null&&calculated!==recorded)eng.push(v.ID)});
   add('Média','Engajamento bruto registrado difere da soma de curtidas + comentários + compartilhamentos + salvamentos.',eng);
   const ord=[],byR=videos.filter(v=>PIL[v.ID]).sort((a,b)=>a.Ranking-b.Ranking);for(let i=1;i<byR.length;i++)if(Number(byR[i].Nota)>Number(byR[i-1].Nota))ord.push(byR[i-1].ID,byR[i].ID);
@@ -4926,7 +4948,7 @@ window.renderAlerts=function(){
   const freshnessDays=30,ownStale=videos.filter(v=>window.__isProprio&&window.__isProprio(v)).filter(v=>{const collected=meta[v.ID]?.coleta;if(!collected||!/^\d{4}-\d{2}-\d{2}$/.test(collected))return false;const age=Math.floor((Date.now()-new Date(collected+'T00:00:00').getTime())/86400000);return age>freshnessDays});
   window.__MAFE_STALE_OWN_IDS=ownStale.map(v=>v.ID);
   add('Média',`Dados de vídeos próprios sem atualização há mais de ${freshnessDays} dias; atualize a captura antes de comparar ou decidir.`,ownStale.map(v=>v.ID));
-  const nt=videos.filter(v=>!(meta[v.ID]&&meta[v.ID].trafego&&meta[v.ID].trafego!=='nao_informado')).map(v=>v.ID);add('Baixa','Tráfego (orgânico ou pago) não informado: impede comparações equivalentes.',nt);
+  const nt=videos.filter(v=>!(meta[v.ID]&&meta[v.ID].trafego&&meta[v.ID].trafego!=='nao_informado')).map(v=>v.ID);add('Baixa','Tráfego não confirmado: os vídeos permanecem como “Não informado”, conforme orientação. Não estime nem marque orgânico/pago sem evidência. Isso não é erro de preenchimento; apenas limita comparações por tipo de distribuição.',nt);
   const mt=id=>meta[id]||{},ageOf=id=>{const p=mt(id).periodo;return p===''||p===undefined||p===null||!Number.isFinite(Number(p))?null:Number(p)};
   const today=new Date();const todayISO=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   add('Alta','Número impossível: curtidas, comentários, compartilhamentos ou salvamentos maiores que as visualizações públicas. Confira a origem antes de usar taxas.',videos.filter(v=>{const vw=num(v.Views);return vw!==null&&vw>0&&['Likes','Comments','Shares','Saves'].some(f=>num(v[f])!==null&&num(v[f])>vw)}).map(v=>v.ID));
@@ -5478,6 +5500,23 @@ const _ts=window.trustSet;window.trustSet=trustSet=function(a,b,c){_ts(a,b,c);re
 // ---- Linha do tempo
 const ST=[['0–3s','Gancho',0],['3–8s','Promessa',3],['8–20s','Demonstração',8],['20–35s','Prova',20],['35–45s','CTA',35]],RK='mafe_radar_ret_v1';
 let rs={};try{rs=JSON.parse(localStorage.getItem(RK)||'{}')||{}}catch(e){}
+// Valores iniciais extraídos de Analise_Retencao_TikTok.xlsx; "Sim (fraco)" foi mapeado como Sim.
+// V5 e V17 são o mesmo vídeo na planilha, mas recebem entradas separadas no catálogo.
+const RETENTION_SEED={
+'V01':['s','s','s','s','n'],'V02':['n','n','s','n','n'],'V03':['s','s','s','s','n'],'V04':['s','s','n','n','n'],
+'V05':['s','s','n','n','n'],'V06':['n','n','s','n','n'],'V07':['s','s','s','s','n'],'V08':['s','s','s','s','n'],
+'V09':['s','s','s','s','s'],'V10':['s','n','s','n','n'],'V11':['n','n','s','s','n'],'V12':['s','s','s','s','n'],
+'V13':['n','s','s','n','n'],'V14':['n','n','s','n','n'],'V15':['n','n','s','n','s'],'V16':['s','s','s','n','n'],
+'V17':['s','s','n','n','n'],'V18':['s','n','s','n','n'],'V19':['s','s','s','n','n'],'V20':['n','s','s','s','n'],
+'V21':['s','s','s','s','n'],'V22':['s','s','s','s','n'],'V23':['s','n','n','n','n'],'V24':['s','s','s','n','n'],
+'V25':['s','s','s','s','s'],'V26':['n','n','n','n','n']
+};
+// Migra uma única vez: preenche campos ausentes/vazios e preserva escolhas já feitas.
+const RETENTION_SEED_KEY='mafe_radar_ret_seed_20261027_v1';
+try{if(localStorage.getItem(RETENTION_SEED_KEY)!=='1'){
+  Object.entries(RETENTION_SEED).forEach(([id,values])=>{rs[id]=rs[id]||{};values.forEach((value,i)=>{if(rs[id][i]===undefined||rs[id][i]==='')rs[id][i]=value})});
+  localStorage.setItem(RK,JSON.stringify(rs));localStorage.setItem(RETENTION_SEED_KEY,'1');
+}}catch(e){}
 const dur=v=>Number(v['Tempo (s)'])||0,app=(v,i)=>dur(v)>ST[i][2];
 function rget(v,i){if(rs[v.ID]&&rs[v.ID][i]!==undefined)return rs[v.ID][i];const p=PL()[v.ID];if(!p)return '';return i===0?(p[0]>=20?'s':'n'):i===2?(p[1]>=13?'s':'n'):''}
 window.retSet=function(id,i,val){rs[id]=rs[id]||{};rs[id][i]=val;try{localStorage.setItem(RK,JSON.stringify(rs))}catch(e){}retSummary();const v=videos.find(x=>x.ID===id);$$('retc_'+id).textContent=retCount(v)};
